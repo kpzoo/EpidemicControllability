@@ -1,4 +1,4 @@
-% Margins from different generation time shapes
+% Reproduces Figure 2
 clearvars; close all; clc;
 
 % Assumptions and notes

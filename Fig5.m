@@ -1,4 +1,4 @@
-% Controllability margins under observation noise
+% Reproduces Figure 5
 clearvars; close all; clc;
 
 % Assumptions and notes

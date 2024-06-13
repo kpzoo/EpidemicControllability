@@ -1,10 +1,11 @@
-% Controllability margins for superspreading and fast-slow transmission
+% Reproduces Figure 6
 clearvars; close all; clc;
 
 % Assumptions and notes
 % - assess several margins and measures of stability
 % - targeted control focuses on 1 of the 2 types
 % - different types have different generation times
+% - superspreading and fast-slow transmission
 
 % Figure defaults
 set(groot, 'defaultAxesTickLabelInterpreter', 'latex', 'defaultLegendInterpreter', 'latex');
@@ -101,7 +102,20 @@ end
 %% Control effort if fast and slow transmission and targetting either
 
 % Assume eps*R is fixed across types to A and define controller form
-A = 0.7; Kdel = (1/7)*(20*s + 1)/(s + 1);
+A = 0.7; Kdel = (1/7)*(1+20*s)/((1+s)^2);
+%Kdel = (1/7)*(1+20*s)/((1+2*s)^2);
+% Ensure controller has correct integral
+t = 0.0001:0.0001:200;  syms('s'); 
+Kx = ilaplace((1/7)*(1+20*s)/((1+2*s)^2)); 
+Kint = eval(Kx); int = trapz(t, Kint); 
+disp(['Integral of k(t): ' num2str(int)]);
+
+% Reset variable types
+s = tf('s'); t = 0:dt:100;
+
+% Find maximum magnitude of controller
+[magtemp, ~, wtemp] = bode(Kdel); [magK, idw] = max(magtemp);
+disp(['Max |K(s)| are: ' num2str(magK)]);
 
 % Store TFs and poles for targeted controllers
 L = s*ones(lg, 2); G = L; p = cell(lg, 2); 
